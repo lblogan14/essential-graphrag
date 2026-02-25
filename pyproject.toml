@@ -1,0 +1,17 @@
+[project]
+name = "essential-graphrag"
+version = "0.1.0"
+description = "Essential GraphRAG Project"
+requires-python = ">=3.12"
+
+dependencies = [
+	"requests",
+	"pdfplumber",
+	"neo4j",
+	"openai",
+    "httpx",
+	"python-dotenv",
+	"tiktoken",
+    "ipykernel",
+    "python-dotenv"
+]

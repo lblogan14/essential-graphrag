@@ -1,0 +1,2 @@
+# Notes for the book "Essential GraphRAG"
+This repository contains the code and resources for the book "Essential GraphRAG". The book provides an in-depth exploration of GraphRAG, a powerful tool for graph-based reasoning and analysis.
