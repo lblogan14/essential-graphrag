@@ -1,3 +1,18 @@
+import os
+import tiktoken
+from neo4j import GraphDatabase
+from openai import OpenAI
+
+neo4j_driver = GraphDatabase.driver(
+    os.environ.get("NEO4J_URI"),
+    auth=(os.environ.get("NEO4J_USERNAME"), os.environ.get("NEO4J_PASSWORD")),
+    notifications_min_severity="OFF"
+)
+
+openai_client = OpenAI(
+    api_key=os.environ.get("OPENAI_API_KEY"),
+)
+
 def chunk_text(text, chunk_size, overlap, split_on_whitespace_only=True):
     chunks = []
     index = 0
@@ -25,3 +40,28 @@ def chunk_text(text, chunk_size, overlap, split_on_whitespace_only=True):
             index += chunk_size
 
     return chunks
+
+
+def chat(messages, model='gpt-4.1', temperature=0., config={}):
+    response = openai_client.chat.completions.create(
+        model=model,
+        temperature=temperature,
+        messages=messages,
+        **config
+    )
+    return response.choices[0].message.content
+
+
+def embed(texts, model="text-embedding-3-small"):
+    response = openai_client.embeddings.create(
+        input=texts,
+        model=model,
+    )
+    return list(map(lambda n: n.embedding, response.data))
+
+
+def num_tokens_from_string(string: str, model: str = "gpt-4.1") -> int:
+    """Returns the number of tokens in a text string."""
+    encoding = tiktoken.encoding_for_model(model)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
