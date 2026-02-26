@@ -65,3 +65,15 @@ def num_tokens_from_string(string: str, model: str = "gpt-4.1") -> int:
     encoding = tiktoken.encoding_for_model(model)
     num_tokens = len(encoding.encode(string))
     return num_tokens
+
+
+def tool_choice(messages, model='gpt-4.1', temperature=0., tools=[], config={}):
+    response = openai_client.chat.completions.create(
+        model=model,
+        temperature=temperature,
+        messages=messages,
+        tools=tools or None,
+        **config
+    )
+
+    return response.choices[0].message.tool_calls
